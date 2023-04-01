@@ -1,0 +1,75 @@
+/* 1. (3pts) Hoje você é um treinador Pokémon. Os Treinadores são aqueles que saem em
+suas jornadas para capturar e treinar o maior número de Pokémon possível, completar
+a pokédex e coletar Insígnias de sua região através de batalhas com Líderes de Ginásio
+para assim participar da liga Pokémon. Sabendo disso, você deve criar as seguintes
+Collections:
+*/
+
+use("ifms")
+db.pokedex.insertMany([
+  {"nome":"PrimalKyogre", "descricao":"Primordial Sea", "ataque":"Nevasca", "defesa":"Cascata", "departamento_id":0},
+  {"nome":"Slaking", "descricao":"preguiçoso", "ataque":"Hiper Feixe", "defesa":"Bocejar", "departamento_id":0},
+  {"nome":"Giratina", "descricao":"Renegado", "ataque":"Poder antigo", "defesa":"Garra das Sombras", "departamento_id":0},
+  {"nome":"Palkia", "descricao":"Pressão", "ataque":"Draco Meteoro", "defesa":"Cauda de dragão", "departamento_id":0},
+  {"nome":"Dialga", "descricao":"Temporal", "ataque":"Draco Meteoro", "defesa":"Garra de metal", "departamento_id":0},
+  {"nome":"Rayquaza", "descricao":"Bloqueio de ar", "ataque":"Furacão", "defesa":"Cauda de dragão", "departamento_id":0},
+  {"nome":"Ho-oh", "descricao":"Arco-íris", "ataque":"Feixe Solar", "defesa":"Bravo pássaro", "departamento_id":0},
+  {"nome":"Lugia", "descricao":"Mergulhando", "ataque":"Aeroblast", "defesa":"Extra-sensorial", "departamento_id":0},
+  {"nome":"Mewtwo", "descricao":"Genético", "ataque":"Hyper Beam", "defesa":"Confusão", "departamento_id":0},
+  {"nome":"Arceus", "descricao":"Multitipo", "ataque":"Hiper Feixe", "defesa":"Cauda de ferro", "departamento_id":0},
+]);
+
+db.ginasios.insertMany([
+    {"ginasio_id": 1, "cidade": "PEWTER", "descricao": "Pedra", "lider": "Brock"}, 
+    {"ginasio_id": 2, "cidade": "CELADON", "descricao": "Planta", "lider": "Erika"},
+    {"ginasio_id": 3, "cidade": "SAFFRON", "descricao": "Psiquico", "lider": "Rocket"},
+    {"ginasio_id": 4, "cidade": "CINNABAR", "descricao": "Fogo", "lider": "Blaine"},
+])
+
+db.pokemonLiderGinasio.insertMany([
+    {"ginasio_id": 1, "pokedex_id": 1},
+    {"ginasio_id": 2, "pokedex_id": 2},    
+    {"ginasio_id": 3, "pokedex_id": 3},
+    {"ginasio_id": 4, "pokedex_id": 4},
+]) 
+
+// 2.
+
+db.pokedex.find({"nome": "Mewtwo"}, {"_id": 0, "nome": 1, "descricao": 1, "ataque": 1, "defesa": 1});
+db.pokedex.find({"nome": "Lugia"}, {"_id": 0, "nome": 1, "descricao": 1, "ataque": 1, "defesa": 1});
+db.pokedex.find({"nome": "Ho-oh"}, {"_id": 0, "nome": 1, "descricao": 1, "ataque": 1, "defesa": 1});
+db.pokedex.find({"nome": "Arceus"}, {"_id": 0, "nome": 1, "descricao": 1, "ataque": 1, "defesa": 1});
+db.pokedex.find({"nome": "Rayquaza"}, {"_id": 0, "nome": 1, "descricao": 1, "ataque": 1, "defesa": 1});
+db.pokedex.find({"nome": "Dialga"}, {"_id": 0, "nome": 1, "descricao": 1, "ataque": 1, "defesa": 1});
+
+db.ginasios.find({"lider": "Brock"}, {"cidade": 1});
+
+
+db.ginasios.find({"ginasio_id": 1}, {"_id": 0, "cidade": 1, "lider": 1})
+
+// 3.
+
+db.pokedex.updateMany({}, {
+    $set: {
+      "tipo": undefined,
+    }
+})
+
+
+
+db.pokedex.deleteMany({"tipo": "inseto"});
+
+db.pokedex.find();
+
+db.pokedex.updateMany({"tipo": ("lutador").toLowerCase()}, {
+    $set: {
+        "ataque": "30",
+    }
+})
+
+
+db.ginasios.updateMany({"cidade": ("myst").toUpperCase()}, {
+    $set: {
+        "cidade": ("Irmãs de Myst").toUpperCase(),
+    }
+}) 

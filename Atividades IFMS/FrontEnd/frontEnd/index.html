@@ -1,0 +1,114 @@
+<!DOCTYPE html http-equiv>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .center {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            height: 40vh;
+            width: 100vw;
+        }
+
+        .center span {
+            margin: 50px 0;
+            font-family: sans-serif;
+        }
+
+        .center button {
+            height: 40px;
+            width: 170px;
+            background: #222;
+            border: 1px solid #222;
+            color: #fff;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: .35s;
+            box-shadow: 0px 3px 30px rgb(44, 44, 44);
+        }
+
+        .center button:hover {
+            background: #fff;
+            color: #222;
+            box-shadow: 0px 3px 50px rgb(44, 44, 44);
+        }
+
+        .box {
+            width:180px; 
+            height:150px;
+            animation: setColor 3s infinite ease-in-out;
+            display: none;
+            border-radius: 5px;
+        }
+
+
+    
+    </style>
+
+    <title>Atividade de Front-end</title>
+
+</head>
+
+
+    <div class="center">
+
+        <div class="box" id="box"></div>
+
+        <span id="infoColor"></span>
+
+        <button id="btn" onclick="$()">Clique aqui</button>
+
+    </div>
+
+
+    <script>
+
+        const btn = document.getElementById("btn");
+
+        const box = document.getElementById('box');
+
+        const infoColor = document.getElementById("infoColor")
+
+        box.style.background = "#ccc";
+
+        btn.addEventListener("click", ()=> {
+        
+            box.style.display = "flex";
+
+        });
+
+        function $() {
+            const whereColor = prompt("Digite a Cor a ser inserida no quadrado:");
+
+            const body = document.querySelector('body')
+            
+            if(whereColor == "white" || whereColor == "#fff" || whereColor == "rgb(255, 255, 255)") {
+                body.style.background = "#ccc"
+            }
+            
+            box.style.background = whereColor;
+
+            infoColor.innerHTML = `Cor trocada para '${whereColor}'`;
+
+        }
+
+    </script>
+
+<body>
+    
+</body>
+</html>

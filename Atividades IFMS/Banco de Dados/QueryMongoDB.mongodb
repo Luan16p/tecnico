@@ -1,0 +1,168 @@
+/* 
+  1. (3pts) Você deve criar um banco de dados para um sistema de ponto biométrico. Seu
+  banco deverá conter 3 Collections conforme a tabela abaixo:
+  trabalhador registroPonto justificativaFalta
+  nome data data
+  cpf hora hora
+  cargo cpfTrabalhador motivo
+  dataAdmissao cpfTrabalhador
+  A collection de trabalhador deve ter 3 trabalhadores diferentes. Para Cada trabalhador,
+  deve ser inserido 4 registroPonto. JustidicativaFalta deve conter pelo menos 1 inserção
+  para cada trabalhador.
+  2. (3pts) Utilizando as collections criada no primeiro exercício, faça as seguintes buscas
+  a. Na collection trabalhador, mostre apenas o nome e cargo de todos os
+  trabalhadores;
+  b. Na collection registroPonto, mostre apenas o motivo para os registros do dia
+  27/05/2022;
+  c. Na collection justificativaFalta, mostre apenas os dados do primeiro
+  trabalhador inserido.
+  3. (4pts) Utilizando as collections criada no primeiro exercício, faça as seguintes alterações:
+  a. Crie dois elementos na collection trabalhador chamado dadaDemissao e
+  motivoDemissao para todos os trabalhadores;
+  b. Coloque uma dada de demissão e um motivo no primeiro trabalhador inserido;
+  c. Exclua todos os registros das collections registroPonto e justificativaFalta para
+  o trabalhador demitido;
+  d. Retire o campo hora da collection justificativaFalta do registro cuja motivação
+  seja “atestado médico”.
+*/
+
+use('IFMS')
+
+const dateNow = new Date();
+
+const cargos = ["Aluno", "Professor", "Diretor", "Coordenador"];
+
+db.trabalhador.insertMany(
+  [
+    {
+      "TOKEN-GPG-LOGG": 'show',
+      "nome": "Diego Barros",
+      "cpf": "001.002.003-09",
+      "cargo": cargos[1],
+      "dataAdmissao": '02/02/2019',
+    },
+    {
+      "TOKEN-GPG-LOGG": 'show',
+      "nome": "Cesar Peixoto Ferreira",
+      "cpf": "002.003.004-08",
+      "cargo": cargos[1],
+      "dataAdmissao": '05/02/2019',
+    },
+    {
+      "TOKEN-GPG-LOGG": 'show',
+      "nome": "Danilo Mikucki",
+      "cpf": "003.004.005-07",
+      "cargo": cargos[3],
+      "dataAdmissao": '06/05/2016',
+    }
+  ]
+); 
+
+db.trabalhador.find({"TOKEN-GPG-LOGG": 'show'}, {"_id": 0, "nome": 1, "cargo": 1})
+
+
+db.registroPonto.insertMany(
+  [
+    {
+      "data": `${dateNow.getDate()}/${dateNow.getMonth()}/${dateNow.getUTCFullYear()}`,
+      "horas": `${dateNow.getHours()}:${dateNow.getMinutes()}`,
+      "cpfTrabalhador": '003.004.005-07',
+    },
+    {
+      "data": `27/05/2022`,
+      "horas": `${dateNow.getHours()}:${dateNow.getMinutes()}`,
+      "cpfTrabalhador": '001.002.003-09',
+    },
+    {
+      "data": `${dateNow.getDate()}/${dateNow.getMonth()}/${dateNow.getUTCFullYear()}`,
+      "horas": `06:59`,
+      "cpfTrabalhador": '002.003.004-08',
+    },
+  ]
+); 
+
+db.registroPonto.find({"data": "27/05/2022"}, {"_id": 0, "horas": 1, "cpfTrabalhador": 1, "motivo": "Dia Útil"})
+
+
+
+/* db.justificativaFalta.insertMany(
+  [
+    {
+      "PK": 0,
+      "data": '19/08/2022',
+      "motivo": "atestado medico",
+      "cpfTrabalhador": "002.003.004-08 [CESAR]",
+
+    },
+    {
+      "PK": 1,
+      "data": '20/07/2022',
+      "motivo": "undefined",
+      "cpfTrabalhador": "001.002.003-09 [DIEGO]",
+    },
+    {
+      "PK": 2,
+      "data": '27/08/2022',
+      "motivo": "atestado medico",
+      "cpfTrabalhador": "001.002.003-09 [DIEGO]",
+    },
+    {
+      "PK": 3,
+      "data": '21/06/2022',
+      "motivo": "undefined",
+      "cpfTrabalhador": "003.004.005-07 [DANILO]",
+    },
+    {
+      "PK": 4,
+      "data": '01/08/2022',
+      "motivo": "undefined",
+      "cpfTrabalhador": "002.003.004-08 [CESAR]",
+    }
+  ]
+); 
+*/
+db.justificativaFalta.find({"PK": 0}, {"_id": false});
+
+
+db.trabalhador.update({}, {
+  $set: {
+    "dadaDemissao": '',
+    "motivoDemissao": '',
+    "demitido": '' // Boolean
+  }
+}, {multi: true});
+
+
+db.trabalhador.update({"cpf": "003.004.005-07"}, {
+  $set: {
+    "dadaDemissao": '02/09/2022',
+    "motivoDemissao": 'Contrato',
+    "demitido": true // Boolean
+  }
+}, {multi: true});
+
+
+db.trabalhador.update({"dadaDemissao": ""}, {
+  $set: {
+    "dadaDemissao": '',
+    "motivoDemissao": '',
+    "demitido": false // Boolean
+  }
+}, {multi: true});
+
+
+
+const demitidos = ["003.004.005-07"]; // CPFS de Trabalhadores demitidos;
+
+const motivosReq = "atestado medico"; // Motivos de Falta real
+
+db.registroPonto.deleteMany({"cpfTrabalhador": demitidos[0]})
+
+db.registroPonto.find({}, {"_id": 0});
+
+db.justificativaFalta.deleteMany({"cpfTrabalhador": `${demitidos[0]} [DANILO]`})
+
+
+db.justificativaFalta.deleteMany({"motivo": motivosReq});
+
+db.justificativaFalta.find({}, {"_id": 0});
